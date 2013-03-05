@@ -43,7 +43,7 @@ describe DailymotionApi::Client do
   describe "#create_video" do
     it "should post the video" do
       client.instance_variable_set(:@access_token, "token")
-      client.instance_variable_set(:@video_url, "video_url")
+      client.instance_variable_set(:@uploaded_video_url, "video_url")
       response = stub("response", parsed_response: {"id" => "video_id"})
       HTTMultiParty.should_receive(:post).with("https://api.dailymotion.com/me/videos", body: {access_token: "token", url: "video_url"}).and_return(response)
 
@@ -58,6 +58,34 @@ describe DailymotionApi::Client do
       HTTMultiParty.should_receive(:post).with("https://api.dailymotion.com/video/video_id", body: {access_token: "token", published: true, title: "video title", channel: "shortfilms", tags: "some_tag"})
 
       client.publish_video(title: "video title", channel: "shortfilms", tags: "some_tag")
+    end
+  end
+
+  describe "#get_video" do
+    it "should return video metadata" do
+      parsed_response = {"url" => "video_url", "channel" => "video_channel"}
+      response = stub("response", parsed_response: parsed_response)
+      HTTMultiParty.should_receive(:get).with("https://api.dailymotion.com/video/123?fields=url,channel").and_return(response)
+
+      client.get_video("123", "url,channel").should == parsed_response
+    end
+  end
+
+  describe "#video_url" do
+    context "when video_id is defined" do
+      it "should return the video url" do
+        client.instance_variable_set(:@video_id, "video_id")
+        response = stub("response", parsed_response: {"url" => "url"})
+        HTTMultiParty.should_receive(:get).with("https://api.dailymotion.com/video/video_id?fields=url").and_return(response)
+
+        client.video_url.should == "url"
+      end
+    end
+
+    context "when video_id isn't defined" do
+      it "should return nil" do
+        client.video_url.should be_nil
+      end
     end
   end
 end

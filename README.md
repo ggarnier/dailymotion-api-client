@@ -32,6 +32,8 @@ Or install it yourself as:
     client.create_video
     # Update video data an publish it
     client.publish_video(title: "my video", channel: "shortfilms", tags: "my_tag")
+    # Get metadata for a video with a specified id
+    client.get_video("video_id", "url,title")
 
 ## Contributing
 
