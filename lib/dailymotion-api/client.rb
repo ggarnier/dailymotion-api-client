@@ -17,6 +17,11 @@ module DailymotionApi
       @access_token = response.parsed_response["access_token"]
     end
 
+    def request_access_token_manage_videos_scope
+      response = HTTMultiParty.post("#{API_URL}/oauth/token", body: {grant_type: "password", client_id: @api_key, client_secret: @api_secret, username: @username, password: @password,scope:"manage_videos"})
+      @access_token = response.parsed_response["access_token"]
+    end
+
     def get_upload_url
       response = HTTMultiParty.get("#{API_URL}/file/upload?access_token=#{@access_token}")
       @upload_url = response.parsed_response["upload_url"]
@@ -45,6 +50,34 @@ module DailymotionApi
 
     def video_url
       @video_url ||= get_video(@video_id, "url")["url"] rescue nil
+    end
+
+    def get_videos_user_authenticated(fields ="")
+      if fields.empty?
+        response = HTTMultiParty.get("#{API_URL}/me/videos", :headers =>{ "Authorization" => "Bearer #{@access_token}"})
+      else
+        response = HTTMultiParty.get("#{API_URL}/me/videos?fields=#{fields}", :headers =>{ "Authorization" => "Bearer #{@access_token}"})
+      end
+
+      response.parsed_response
+    end
+
+    def get_information_user_authenticated(fields = "")
+      if fields.empty?
+        response = HTTMultiParty.get("#{API_URL}/me/", :headers =>{ "Authorization" => "Bearer #{@access_token}"})
+      else
+        response = HTTMultiParty.get("#{API_URL}/me?fields=#{fields}", :headers =>{ "Authorization" => "Bearer #{@access_token}"})
+      end
+
+      response.parsed_response
+    end
+
+    def delete_video(video_id)
+      #It's required to get an access token with manage_videos scope
+      return nil unless video_id
+
+      response = HTTMultiParty.delete("#{API_URL}/me/videos/#{video_id}",:headers =>{ "Authorization" => "Bearer #{@access_token}"})
+      response.parsed_response
     end
   end
 end
