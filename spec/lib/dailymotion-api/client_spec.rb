@@ -5,6 +5,7 @@ describe DailymotionApi::Client do
   before do
     HTTMultiParty.stub(:get)
     HTTMultiParty.stub(:post)
+    HTTMultiParty.stub(:delete)
   end
 
   let! :client do
@@ -97,14 +98,62 @@ describe DailymotionApi::Client do
       end
     end
 
+    describe "#get_information_user_authenticated " do
+      it "should return the information of an user authenticated with filters" do
+
+
+        parsed_response = {"id"=>"id", "screenname"=>"screenname"}
+        response = stub("response", parsed_response: parsed_response)
+        HTTMultiParty.should_receive(:get).with("https://api.dailymotion.com/me?fields=id,screenname",:headers =>{ "Authorization" => "Bearer #{@access_token}"}).and_return(response)
+
+        client.get_information_user_authenticated("id,screenname").should == parsed_response
+      end
+    end
+
     describe "#get_information_user_authenticated" do
-      it "should return the information of an user authenticated" do
+      it "should return the information of an user authenticated without filters" do
 
-        client.instance_variable_set(:@access_token, "token")
-        response = stub("response", parsed_response: {"screenname" => "screenname"})
-        HTTMultiParty.should_receive(:get).with("https://api.dailymotion.com/me/videos", headers: { "Authorization" => "Bearer #{@access_token}"}).and_return(response)
 
-        client.get_information_user_authenticated.should == "screenname"
+        parsed_response = {"id"=>"id", "screenname"=>"screenname"}
+        response = stub("response", parsed_response: parsed_response)
+        HTTMultiParty.should_receive(:get).with("https://api.dailymotion.com/me/",:headers =>{ "Authorization" => "Bearer #{@access_token}"}).and_return(response)
+
+        client.get_information_user_authenticated.should == parsed_response
+      end
+    end
+
+    describe "#get_videos_user_authenticated" do
+      it "should return the information of an user authenticated with filters" do
+
+
+        parsed_response = {"page"=>"1", "limit"=>"10", "explicit"=>"false", "total"=>"1", "has_more"=>"false", "list"=>[{"id"=>"idvideo", "title"=>"testvideo"}]}
+        response = stub("response", parsed_response: parsed_response)
+        HTTMultiParty.should_receive(:get).with("https://api.dailymotion.com/me/videos?fields=id,title",:headers =>{ "Authorization" => "Bearer #{@access_token}"}).and_return(response)
+
+        client.get_videos_user_authenticated("id,title").should == parsed_response
+      end
+    end
+
+    describe "#get_videos_user_authenticated" do
+      it "should return the information of an user authenticated without filters" do
+
+
+        parsed_response = {"page"=>"1", "limit"=>"10", "explicit"=>"false", "total"=>"1", "has_more"=>"false",
+                           "list"=>[{"id"=>"idvideo", "title"=>"testvideo", "channel"=>"sportTest", "owner"=>"test"}]}
+        response = stub("response", parsed_response: parsed_response)
+        HTTMultiParty.should_receive(:get).with("https://api.dailymotion.com/me/videos",:headers =>{ "Authorization" => "Bearer #{@access_token}"}).and_return(response)
+
+        client.get_videos_user_authenticated.should == parsed_response
+      end
+    end
+
+    describe "#delete_video" do
+      it "should delete a specific video" do
+        parsed_response = {}
+        response = stub("response", parsed_response: parsed_response)
+        HTTMultiParty.should_receive(:delete).with("https://api.dailymotion.com/me/videos/xxx",:headers =>{ "Authorization" => "Bearer #{@access_token}"}).and_return(response)
+
+        client.delete_video("xxx").should == parsed_response
       end
     end
   end
