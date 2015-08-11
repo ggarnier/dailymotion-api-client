@@ -87,5 +87,14 @@ describe DailymotionApi::Client do
         client.video_url.should be_nil
       end
     end
+
+    describe "#request_access_token_manage_videos_scope" do
+      it "should do a request for an access token with manage videos scrope" do
+        response = stub("response", parsed_response: {"access_token" => "token"})
+        HTTMultiParty.should_receive(:post).with("https://api.dailymotion.com/oauth/token", body: {grant_type: "password", client_id: "key", client_secret: "secret", username: "test", password: "12345",scope:"manage_videos"}).and_return(response)
+
+        client.request_access_token.should == "token"
+      end
+    end
   end
 end
