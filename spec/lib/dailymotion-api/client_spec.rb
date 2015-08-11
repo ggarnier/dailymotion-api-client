@@ -93,7 +93,18 @@ describe DailymotionApi::Client do
         response = stub("response", parsed_response: {"access_token" => "token"})
         HTTMultiParty.should_receive(:post).with("https://api.dailymotion.com/oauth/token", body: {grant_type: "password", client_id: "key", client_secret: "secret", username: "test", password: "12345",scope:"manage_videos"}).and_return(response)
 
-        client.request_access_token.should == "token"
+        client.request_access_token_manage_videos_scope.should == "token"
+      end
+    end
+
+    describe "#get_information_user_authenticated" do
+      it "should return the information of an user authenticated" do
+
+        client.instance_variable_set(:@access_token, "token")
+        response = stub("response", parsed_response: {"screenname" => "screenname"})
+        HTTMultiParty.should_receive(:get).with("https://api.dailymotion.com/me/videos", headers: { "Authorization" => "Bearer #{@access_token}"}).and_return(response)
+
+        client.get_information_user_authenticated.should == "screenname"
       end
     end
   end
