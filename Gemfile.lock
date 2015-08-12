@@ -1,22 +1,24 @@
 PATH
   remote: .
   specs:
-    dailymotion-api-client (0.1.0)
+    dailymotion-api-client (0.1.2)
       httmultiparty
 
 GEM
   remote: https://rubygems.org/
   specs:
     diff-lcs (1.2.1)
-    httmultiparty (0.3.8)
+    httmultiparty (0.3.16)
       httparty (>= 0.7.3)
+      mimemagic
       multipart-post
-    httparty (0.10.2)
-      multi_json (~> 1.0)
+    httparty (0.13.5)
+      json (~> 1.8)
       multi_xml (>= 0.5.2)
-    multi_json (1.6.1)
-    multi_xml (0.5.3)
-    multipart-post (1.2.0)
+    json (1.8.3)
+    mimemagic (0.3.0)
+    multi_xml (0.5.5)
+    multipart-post (2.0.0)
     rspec (2.13.0)
       rspec-core (~> 2.13.0)
       rspec-expectations (~> 2.13.0)
@@ -32,3 +34,6 @@ PLATFORMS
 DEPENDENCIES
   dailymotion-api-client!
   rspec
+
+BUNDLED WITH
+   1.10.6
