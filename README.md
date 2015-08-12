@@ -1,5 +1,7 @@
 # DailyMotion API Ruby Client
 
+[![Build Status](https://travis-ci.org/ggarnier/dailymotion-api-client.svg)](https://travis-ci.org/ggarnier/dailymotion-api-client)
+
 Client for DailyMotion API (http://www.dailymotion.com/doc/api/graph-api.html) written in Ruby.
 
 ## Installation
@@ -22,16 +24,22 @@ Or install it yourself as:
 
     # Create an instance of DailymotionApi::Client
     client = DailymotionApi::Client.new(username: "username", password: "password", api_key: "key", api_secret: "secret")
+
     # Request an access token
     client.request_access_token
+
     # Request an upload url
     client.get_upload_url
+
     # Post your video
     client.post_video(File.new("my_video.mp4"))
+
     # Create a video
     client.create_video
+
     # Update video data an publish it
     client.publish_video(title: "my video", channel: "shortfilms", tags: "my_tag")
+
     # Get metadata for a video with a specified id
     client.get_video("video_id", "url,title")
 
