@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+
 module DailymotionApi
   class Client
     API_URL = "https://api.dailymotion.com"
@@ -13,12 +14,12 @@ module DailymotionApi
     end
 
     def request_access_token
-      response = HTTMultiParty.post("#{API_URL}/oauth/token", body: {grant_type: "password", client_id: @api_key, client_secret: @api_secret, username: @username, password: @password})
+      response = HTTMultiParty.post("#{API_URL}/oauth/token", body: { grant_type: "password", client_id: @api_key, client_secret: @api_secret, username: @username, password: @password })
       @access_token = response.parsed_response["access_token"]
     end
 
     def request_access_token_manage_videos_scope
-      response = HTTMultiParty.post("#{API_URL}/oauth/token", body: {grant_type: "password", client_id: @api_key, client_secret: @api_secret, username: @username, password: @password,scope:"manage_videos"})
+      response = HTTMultiParty.post("#{API_URL}/oauth/token", body: { grant_type: "password", client_id: @api_key, client_secret: @api_secret, username: @username, password: @password, scope: "manage_videos" })
       @access_token = response.parsed_response["access_token"]
     end
 
@@ -28,12 +29,12 @@ module DailymotionApi
     end
 
     def post_video(video)
-      response = HTTMultiParty.post(@upload_url, body: {file: video})
+      response = HTTMultiParty.post(@upload_url, body: { file: video })
       @uploaded_video_url = response.parsed_response["url"]
     end
 
     def create_video
-      response = HTTMultiParty.post("#{API_URL}/me/videos", body: {access_token: @access_token, url: @uploaded_video_url})
+      response = HTTMultiParty.post("#{API_URL}/me/videos", body: { access_token: @access_token, url: @uploaded_video_url })
       @video_id = response.parsed_response["id"]
     end
 
@@ -52,11 +53,11 @@ module DailymotionApi
       @video_url ||= get_video(@video_id, "url")["url"] rescue nil
     end
 
-    def get_videos_user_authenticated(fields ="")
+    def get_videos_user_authenticated(fields = "")
       if fields.empty?
-        response = HTTMultiParty.get("#{API_URL}/me/videos", :headers =>{ "Authorization" => "Bearer #{@access_token}"})
+        response = HTTMultiParty.get("#{API_URL}/me/videos", headers: { "Authorization" => "Bearer #{@access_token}" })
       else
-        response = HTTMultiParty.get("#{API_URL}/me/videos?fields=#{fields}", :headers =>{ "Authorization" => "Bearer #{@access_token}"})
+        response = HTTMultiParty.get("#{API_URL}/me/videos?fields=#{fields}", headers: { "Authorization" => "Bearer #{@access_token}" })
       end
 
       response.parsed_response
@@ -64,19 +65,19 @@ module DailymotionApi
 
     def get_information_user_authenticated(fields = "")
       if fields.empty?
-        response = HTTMultiParty.get("#{API_URL}/me/", :headers =>{ "Authorization" => "Bearer #{@access_token}"})
+        response = HTTMultiParty.get("#{API_URL}/me/", headers: { "Authorization" => "Bearer #{@access_token}" })
       else
-        response = HTTMultiParty.get("#{API_URL}/me?fields=#{fields}", :headers =>{ "Authorization" => "Bearer #{@access_token}"})
+        response = HTTMultiParty.get("#{API_URL}/me?fields=#{fields}", headers: { "Authorization" => "Bearer #{@access_token}" })
       end
 
       response.parsed_response
     end
 
     def delete_video(video_id)
-      #It's required to get an access token with manage_videos scope
+      # It's required to get an access token with manage_videos scope
       return nil unless video_id
 
-      response = HTTMultiParty.delete("#{API_URL}/me/videos/#{video_id}",:headers =>{ "Authorization" => "Bearer #{@access_token}"})
+      response = HTTMultiParty.delete("#{API_URL}/me/videos/#{video_id}", headers: { "Authorization" => "Bearer #{@access_token}" })
       response.parsed_response
     end
   end
