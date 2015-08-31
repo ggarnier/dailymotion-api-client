@@ -45,7 +45,10 @@ module DailymotionApi
     def get_video(video_id, fields = "")
       return nil unless video_id
 
-      response = HTTMultiParty.get("#{API_URL}/video/#{video_id}?fields=#{fields}")
+      url = "#{API_URL}/video/#{video_id}"
+      url << "?fields=#{fields}" unless fields.empty?
+
+      response = HTTMultiParty.get(url)
       response.parsed_response
     end
 

@@ -49,6 +49,10 @@ client.publish_video(title: "my video", channel: "shortfilms", tags: "my_tag")
 ### Getting info about a published video
 
 ```ruby
+# Get basic metadata for a video with id "video_id"
+client.get_video("video_id")
+=> {"id"=>"video_id", "title"=>"my video", "channel"=>"shortfilms", "owner"=>"owner_id"}
+
 # Get specific fields for a video with id "video_id"
 client.get_video("video_id", "url,title")
 => {"url"=>"http://www.dailymotion.com/video/video_id_my-video_shortfilms", "title"=>"my video"}

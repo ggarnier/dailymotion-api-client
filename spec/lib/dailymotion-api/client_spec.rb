@@ -64,12 +64,24 @@ describe DailymotionApi::Client do
   end
 
   describe "#get_video" do
-    it "should return video metadata" do
-      parsed_response = { "url" => "video_url", "channel" => "video_channel" }
-      response = stub("response", parsed_response: parsed_response)
-      HTTMultiParty.should_receive(:get).with("https://api.dailymotion.com/video/123?fields=url,channel").and_return(response)
+    context "without parameters" do
+      it "should return requested video metadata" do
+        parsed_response = { "url" => "video_url", "channel" => "video_channel" }
+        response = stub("response", parsed_response: parsed_response)
+        HTTMultiParty.should_receive(:get).with("https://api.dailymotion.com/video/123?fields=url,channel").and_return(response)
 
-      client.get_video("123", "url,channel").should == parsed_response
+        client.get_video("123", "url,channel").should == parsed_response
+      end
+    end
+
+    context "with parameters" do
+      it "should return basic video metadata" do
+        parsed_response = { "id" => "video_id", "title" => "my video" }
+        response = stub("response", parsed_response: parsed_response)
+        HTTMultiParty.should_receive(:get).with("https://api.dailymotion.com/video/123").and_return(response)
+
+        client.get_video("123").should == parsed_response
+      end
     end
   end
 
