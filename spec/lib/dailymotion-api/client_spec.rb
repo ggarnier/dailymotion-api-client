@@ -22,13 +22,13 @@ describe DailymotionApi::Client do
     end
   end
 
-  describe "#get_upload_url" do
+  describe "#generate_upload_url" do
     it "should request an upload url" do
       client.instance_variable_set(:@access_token, "token")
       response = stub("response", parsed_response: { "upload_url" => "upload_url" })
       HTTMultiParty.should_receive(:get).with("https://api.dailymotion.com/file/upload?access_token=token").and_return(response)
 
-      client.get_upload_url.should == "upload_url"
+      client.generate_upload_url.should == "upload_url"
     end
   end
 

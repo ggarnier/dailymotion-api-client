@@ -34,7 +34,7 @@ client = DailymotionApi::Client.new(username: "username", password: "password", 
 client.request_access_token
 
 # Request an upload url
-client.get_upload_url
+client.generate_upload_url
 
 # Post your video
 client.post_video(File.new("my_video.mp4"))

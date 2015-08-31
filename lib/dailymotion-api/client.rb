@@ -23,7 +23,7 @@ module DailymotionApi
       @access_token = response.parsed_response["access_token"]
     end
 
-    def get_upload_url
+    def generate_upload_url
       response = HTTMultiParty.get("#{API_URL}/file/upload?access_token=#{@access_token}")
       @upload_url = response.parsed_response["upload_url"]
     end
