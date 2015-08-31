@@ -111,37 +111,37 @@ describe DailymotionApi::Client do
       end
     end
 
-    describe "#get_information_user_authenticated " do
+    describe "#get_authenticated_user_info " do
       it "should return the information of an user authenticated with filters" do
         parsed_response = { "id" => "id", "screenname" => "screenname" }
         response = stub("response", parsed_response: parsed_response)
         HTTMultiParty.should_receive(:get).with("https://api.dailymotion.com/me?fields=id,screenname", headers: { "Authorization" => "Bearer #{@access_token}" }).and_return(response)
 
-        client.get_information_user_authenticated("id,screenname").should == parsed_response
+        client.get_authenticated_user_info("id,screenname").should == parsed_response
       end
     end
 
-    describe "#get_information_user_authenticated" do
+    describe "#get_authenticated_user_info" do
       it "should return the information of an user authenticated without filters" do
         parsed_response = { "id" => "id", "screenname" => "screenname" }
         response = stub("response", parsed_response: parsed_response)
         HTTMultiParty.should_receive(:get).with("https://api.dailymotion.com/me/", headers: { "Authorization" => "Bearer #{@access_token}" }).and_return(response)
 
-        client.get_information_user_authenticated.should == parsed_response
+        client.get_authenticated_user_info.should == parsed_response
       end
     end
 
-    describe "#get_videos_user_authenticated" do
+    describe "#get_authenticated_user_videos" do
       it "should return the information of an user authenticated with filters" do
         parsed_response = { "page" => "1", "limit" => "10", "explicit" => "false", "total" => "1", "has_more" => "false", "list" => [{ "id" => "idvideo", "title" => "testvideo" }] }
         response = stub("response", parsed_response: parsed_response)
         HTTMultiParty.should_receive(:get).with("https://api.dailymotion.com/me/videos?fields=id,title", headers: { "Authorization" => "Bearer #{@access_token}" }).and_return(response)
 
-        client.get_videos_user_authenticated("id,title").should == parsed_response
+        client.get_authenticated_user_videos("id,title").should == parsed_response
       end
     end
 
-    describe "#get_videos_user_authenticated" do
+    describe "#get_authenticated_user_videos" do
       it "should return the information of an user authenticated without filters" do
         parsed_response = {
           "page" => "1", "limit" => "10", "explicit" => "false", "total" => "1", "has_more" => "false",
@@ -150,7 +150,7 @@ describe DailymotionApi::Client do
         response = stub("response", parsed_response: parsed_response)
         HTTMultiParty.should_receive(:get).with("https://api.dailymotion.com/me/videos", headers: { "Authorization" => "Bearer #{@access_token}" }).and_return(response)
 
-        client.get_videos_user_authenticated.should == parsed_response
+        client.get_authenticated_user_videos.should == parsed_response
       end
     end
 

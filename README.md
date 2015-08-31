@@ -63,10 +63,10 @@ client.get_video("video_id", "url,title")
 ```ruby
 client.request_access_token
 
-client.get_information_user_authenticated
+client.get_authenticated_user_info
 => {"id"=>"owner_id", "screenname"=>"username"}
 
-client.get_information_user_authenticated("screenname")
+client.get_authenticated_user_info("screenname")
 => {"screenname"=>"username"}
 ```
 
@@ -75,10 +75,10 @@ client.get_information_user_authenticated("screenname")
 ```ruby
 client.request_access_token
 
-client.get_videos_user_authenticated
+client.get_authenticated_user_videos
 => {"page"=>1, "limit"=>10, "explicit"=>false, "total"=>1, "has_more"=>false, "list"=>[{"id"=>"video_id", "title"=>"my video", "channel"=>"shortfilms", "owner"=>"owner_id"}]}
 
-client.get_videos_user_authenticated("url")
+client.get_authenticated_user_videos("url")
  => {"page"=>1, "limit"=>10, "explicit"=>false, "total"=>1, "has_more"=>false, "list"=>[{"url"=>"http://www.dailymotion.com/video/video_id_my-video_shortfilms"}]}
 ```
 

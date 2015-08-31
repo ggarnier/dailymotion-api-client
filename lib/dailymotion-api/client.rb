@@ -56,7 +56,7 @@ module DailymotionApi
       @video_url ||= get_video(@video_id, "url")["url"] rescue nil
     end
 
-    def get_videos_user_authenticated(fields = "")
+    def get_authenticated_user_videos(fields = "")
       if fields.empty?
         response = HTTMultiParty.get("#{API_URL}/me/videos", headers: { "Authorization" => "Bearer #{@access_token}" })
       else
@@ -66,7 +66,7 @@ module DailymotionApi
       response.parsed_response
     end
 
-    def get_information_user_authenticated(fields = "")
+    def get_authenticated_user_info(fields = "")
       if fields.empty?
         response = HTTMultiParty.get("#{API_URL}/me/", headers: { "Authorization" => "Bearer #{@access_token}" })
       else
