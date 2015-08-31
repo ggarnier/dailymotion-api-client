@@ -14,12 +14,12 @@ module DailymotionApi
     end
 
     def request_access_token
-      response = HTTMultiParty.post("#{API_URL}/oauth/token", body: { grant_type: "password", client_id: @api_key, client_secret: @api_secret, username: @username, password: @password })
+      response = HTTMultiParty.post("#{API_URL}/oauth/token", body: request_access_token_params)
       @access_token = response.parsed_response["access_token"]
     end
 
     def request_access_token_manage_videos_scope
-      response = HTTMultiParty.post("#{API_URL}/oauth/token", body: { grant_type: "password", client_id: @api_key, client_secret: @api_secret, username: @username, password: @password, scope: "manage_videos" })
+      response = HTTMultiParty.post("#{API_URL}/oauth/token", body: request_access_token_params.merge(scope: "manage_videos"))
       @access_token = response.parsed_response["access_token"]
     end
 
@@ -38,8 +38,8 @@ module DailymotionApi
       @video_id = response.parsed_response["id"]
     end
 
-    def publish_video(data)
-      HTTMultiParty.post("#{API_URL}/video/#{@video_id}", body: data.merge(access_token: @access_token, published: true))
+    def publish_video(metadata)
+      HTTMultiParty.post("#{API_URL}/video/#{@video_id}", body: metadata.merge(access_token: @access_token, published: true))
     end
 
     def get_video(video_id, fields = "")
@@ -79,6 +79,12 @@ module DailymotionApi
 
       response = HTTMultiParty.delete("#{API_URL}/me/videos/#{video_id}", headers: { "Authorization" => "Bearer #{@access_token}" })
       response.parsed_response
+    end
+
+    private
+
+    def request_access_token_params
+      { grant_type: "password", client_id: @api_key, client_secret: @api_secret, username: @username, password: @password }
     end
   end
 end
