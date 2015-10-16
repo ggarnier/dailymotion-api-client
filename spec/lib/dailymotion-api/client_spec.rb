@@ -35,7 +35,7 @@ describe DailymotionApi::Client do
   describe "#post_video" do
     it "should post the video" do
       client.instance_variable_set(:@upload_url, "upload_url")
-      response = stub("response", parsed_response: { "url" => "video_url" })
+      response = stub("response", parsed_response: "{\"url\":\"video_url\"}")
       HTTMultiParty.should_receive(:post).with("upload_url", body: { file: "video_data" }).and_return(response)
 
       client.post_video("video_data").should == "video_url"

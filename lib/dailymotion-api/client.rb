@@ -30,7 +30,7 @@ module DailymotionApi
 
     def post_video(video)
       response = HTTMultiParty.post(@upload_url, body: { file: video })
-      @uploaded_video_url = response.parsed_response["url"]
+      @uploaded_video_url = JSON.parse(response.parsed_response)["url"]
     end
 
     def create_video
