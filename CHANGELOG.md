@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.1
+
+- Fix response to post video action - fixes #3
+
 ## 0.2.0
 
 - Rename `get_upload_url` to `generate_upload_url`

@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    dailymotion-api-client (0.2.0)
+    dailymotion-api-client (0.2.1)
       httmultiparty
 
 GEM
