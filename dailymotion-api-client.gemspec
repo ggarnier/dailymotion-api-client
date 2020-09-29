@@ -23,6 +23,7 @@ Gem::Specification.new do |gem|
   gem.require_paths = ["lib"]
 
   gem.add_runtime_dependency "httmultiparty", "~> 0.3.16"
+  gem.add_runtime_dependency "multipart-post", "~> 2.1", ">= 2.1.1"
 
   gem.add_development_dependency "bundler", "~> 1.17"
   gem.add_development_dependency "rake", "~> 10.0"

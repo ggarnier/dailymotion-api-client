@@ -5,6 +5,7 @@ module DailymotionApi
 
   class Client
     require "httmultiparty"
+    require "net/http/post/multipart"
 
     API_URL = "https://api.dailymotion.com"
 
@@ -33,8 +34,12 @@ module DailymotionApi
     end
 
     def post_video(video)
-      response = HTTMultiParty.post(@upload_url, body: { file: video })
-      @uploaded_video_url = JSON.parse(response.parsed_response)["url"]
+      url = URI.parse(@upload_url)
+      response = Net::HTTP.start(url.host, url.port, use_ssl: true) do |https|
+        request = Net::HTTP::Post::Multipart.new(@upload_url, file: UploadIO.new(video, "video/mp4"))
+        https.request(request)
+      end
+      @uploaded_video_url = JSON.parse(response.body)["url"]
     end
 
     def create_video

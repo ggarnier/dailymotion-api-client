@@ -9,7 +9,7 @@ RSpec.describe DailymotionApi::Client do
 
   it "has a version number" do
     expect(DailymotionApi::VERSION).not_to be nil
-    expect(DailymotionApi::VERSION).to eq "0.2.3"
+    expect(DailymotionApi::VERSION).to eq "0.2.4"
   end
 
   describe "#request_access_token" do
@@ -40,10 +40,10 @@ RSpec.describe DailymotionApi::Client do
 
   describe "#post_video" do
     it "should post the video" do
-      client.instance_variable_set(:@upload_url, "upload_url")
-      response = instance_double("response", parsed_response: "{\"url\":\"video_url\"}")
-      allow(HTTMultiParty).to receive(:post)
-        .with("upload_url", body: { file: "video_data" })
+      client.instance_variable_set(:@upload_url, "https://upload_url.de")
+      response = instance_double("response", body: { "url" => "video_url" }.to_json)
+      allow(Net::HTTP).to receive(:start)
+        .with("upload_url.de", 443, { use_ssl: true })
         .and_return(response)
 
       expect(client.post_video("video_data")).to eq "video_url"
