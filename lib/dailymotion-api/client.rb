@@ -1,7 +1,11 @@
-# -*- coding: utf-8 -*-
+# frozen_string_literal: true
 
 module DailymotionApi
+  class Error < StandardError; end
+
   class Client
+    require "httmultiparty"
+
     API_URL = "https://api.dailymotion.com"
 
     attr_reader :video_id
@@ -46,31 +50,35 @@ module DailymotionApi
       return nil unless video_id
 
       url = "#{API_URL}/video/#{video_id}"
-      url << "?fields=#{fields}" unless fields.empty?
+      url += "?fields=#{fields}" unless fields.empty?
 
       response = HTTMultiParty.get(url)
       response.parsed_response
     end
 
     def video_url
-      @video_url ||= get_video(@video_id, "url")["url"] rescue nil
+      @video_url ||=  begin
+                        get_video(@video_id, "url")["url"]
+                      rescue StandardError
+                        nil
+                      end
     end
 
     def get_authenticated_user_videos(fields = "")
-      if fields.empty?
-        response = HTTMultiParty.get("#{API_URL}/me/videos", headers: { "Authorization" => "Bearer #{@access_token}" })
+      response =  if fields.empty?
+        HTTMultiParty.get("#{API_URL}/me/videos", headers: { "Authorization" => "Bearer #{@access_token}" })
       else
-        response = HTTMultiParty.get("#{API_URL}/me/videos?fields=#{fields}", headers: { "Authorization" => "Bearer #{@access_token}" })
+        HTTMultiParty.get("#{API_URL}/me/videos?fields=#{fields}", headers: { "Authorization" => "Bearer #{@access_token}" })
       end
 
       response.parsed_response
     end
 
     def get_authenticated_user_info(fields = "")
-      if fields.empty?
-        response = HTTMultiParty.get("#{API_URL}/me/", headers: { "Authorization" => "Bearer #{@access_token}" })
+      response =  if fields.empty?
+        HTTMultiParty.get("#{API_URL}/me/", headers: { "Authorization" => "Bearer #{@access_token}" })
       else
-        response = HTTMultiParty.get("#{API_URL}/me?fields=#{fields}", headers: { "Authorization" => "Bearer #{@access_token}" })
+        HTTMultiParty.get("#{API_URL}/me?fields=#{fields}", headers: { "Authorization" => "Bearer #{@access_token}" })
       end
 
       response.parsed_response
@@ -85,9 +93,8 @@ module DailymotionApi
     end
 
     private
-
-    def request_access_token_params
-      { grant_type: "password", client_id: @api_key, client_secret: @api_secret, username: @username, password: @password }
-    end
+      def request_access_token_params
+        { grant_type: "password", client_id: @api_key, client_secret: @api_secret, username: @username, password: @password }
+      end
   end
 end

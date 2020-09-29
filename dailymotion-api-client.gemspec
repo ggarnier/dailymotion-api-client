@@ -1,26 +1,32 @@
-# -*- encoding: utf-8 -*-
+# frozen_string_literal: true
 
-lib = File.expand_path("../lib", __FILE__)
+lib = File.expand_path("lib", __dir__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require "dailymotion-api/version"
 
 Gem::Specification.new do |gem|
   gem.name          = "dailymotion-api-client"
   gem.version       = DailymotionApi::VERSION
-  gem.authors       = ["Guilherme Garnier"]
-  gem.email         = ["guilherme.garnier@gmail.com"]
-  gem.description   = "DailyMotion API Ruby client"
+  gem.authors       = ["Guilherme Garnier", "Viktor Schmidt"]
+  gem.email         = ["guilherme.garnier@gmail.com", "viktorianer4life@gmail.com"]
+  gem.description   = "Client for DailyMotion API (http://www.dailymotion.com/doc/api/graph-api.html) written in Ruby."
   gem.summary       = "DailyMotion API Ruby client"
   gem.homepage      = "http://github.com/ggarnier/dailymotion-api-client"
+  gem.license       = "MIT"
 
-  gem.files         = `git ls-files`.split($INPUT_RECORD_SEPARATOR)
-  gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
+  gem.files         = Dir.chdir(File.expand_path(__dir__)) do
+    `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
+  end
+  gem.bindir        = "bin"
+  gem.executables   = gem.files.grep(%r{^bin/}).map { |f| File.basename(f) }
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
   gem.require_paths = ["lib"]
 
-  gem.add_runtime_dependency "httmultiparty"
+  gem.add_runtime_dependency "httmultiparty", "~> 0.3.16"
 
-  gem.add_development_dependency "rspec"
-  gem.add_development_dependency "rake"
-  gem.add_development_dependency "rubocop"
+  gem.add_development_dependency "bundler", "~> 1.17"
+  gem.add_development_dependency "rake", "~> 10.0"
+  gem.add_development_dependency "rspec", "~> 3.0"
+  gem.add_development_dependency "rubocop-rails_config", "~> 0.11.0"
+  gem.add_development_dependency "rubocop", "~> 0.81.0"
 end

@@ -1,8 +1,16 @@
-# -*- encoding: utf-8 -*-
+# frozen_string_literal: true
 
-ENV["RACK_ENV"] ||= "test"
+require "bundler/setup"
+require "dailymotion-api/client"
 
-$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
+RSpec.configure do |config|
+  # Enable flags like --only-failures and --next-failure
+  config.example_status_persistence_file_path = ".rspec_status"
 
-require "rspec"
-require "dailymotion-api-client"
+  # Disable RSpec exposing methods globally on `Module` and `main`
+  config.disable_monkey_patching!
+
+  config.expect_with :rspec do |c|
+    c.syntax = :expect
+  end
+end
