@@ -12,4 +12,5 @@ require "dailymotion-api/client"
 # Pry.start
 
 require "irb"
-IRB.start(__FILE__)
+require "pry"
+pry
